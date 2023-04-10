@@ -23,9 +23,7 @@ const expected3 = "test a is This";
  *    themselves are not reversed.
  */
 function reverseWordOrder(wordsStr) {
-    wordsStr.trim().split(" ")
-    let reverseStr = wordsStr.trim().split(" ").reverse().join(" ")
-    return reverseStr
+    return wordsStr.replace(/\s+/g,' ').trim().split(" ").reverse().join(" ")
 }
 console.log(reverseWordOrder(str1))
 console.log(reverseWordOrder(str2))
