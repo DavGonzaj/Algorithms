@@ -29,7 +29,7 @@ function stringDedupe(str) {
   }
   let newStr = "";
   const seen = {}; //h:true
-  for (let i = 0; i < str.length - 1; i++) {
+  for (let i = 0; i < str.length; i++) {
     if (!seen[str[i]]) {
       newStr += str[i];
       seen[str[i]] = true;
