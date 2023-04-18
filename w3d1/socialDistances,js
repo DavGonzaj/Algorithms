@@ -48,3 +48,15 @@ console.log(socialDistancingEnforcer(queue1));
 console.log(socialDistancingEnforcer(queue2));
 console.log(socialDistancingEnforcer(queue3));
 console.log(socialDistancingEnforcer(queue4));
+
+
+//one liner solution
+function isAnagram(s1, s2) {
+  for (i in s1) {
+    //checks # of occurences of current char in both strings
+    if((s2.toLowerCase().split(s1[i]).length) != (s1.toLowerCase().split(s1[i]).length)) {
+      return false
+    }
+  }
+  return true
+}
