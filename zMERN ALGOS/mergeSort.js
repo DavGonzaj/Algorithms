@@ -61,7 +61,23 @@ const expectedSort = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
  * @param {Array<number>} nums
  * @returns {Array<number>} A New sorted array.
  */
-function mergeSort(nums = []) {}
+function mergeSort(nums = []) {
+  if (nums.length <= 1){
+    return nums;
+  }
+
+  const middlePoint = Math.floor(nums.length/2);
+  const left = nums.slice(0, middlePoint);
+  const right = nums.slice(middlePoint);
+  
+  return merge(mergeSort(left), mergeSort(right));
+
+  //we need to split the array, we use slice method we can declare a left variable as the left half, and a right variable as the right half.
+  //left = leftArr
+  //right = rightArr
+}
+
+return merge(leftArr, rightArr)
 
 
 
@@ -155,4 +171,20 @@ const expectedSort = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
  * @param {Array<number>} nums
  * @returns {Array<number>} A New sorted array.
  */
-function mergeSort(nums = []) { }
+ffunction mergeSort(nums = []) {
+  if (nums.length <= 1){
+    return nums;
+  }
+
+  const middlePoint = Math.floor(nums.length/2);
+  const left = nums.slice(0, middlePoint);
+  const right = nums.slice(middlePoint);
+  
+  return merge(mergeSort(left), mergeSort(right));
+
+  //we need to split the array, we use slice method we can declare a left variable as the left half, and a right variable as the right half.
+  //left = leftArr
+  //right = rightArr
+}
+
+return merge(leftArr, rightArr)
