@@ -46,7 +46,7 @@ function canStringBecomePalindrome(str) {
   }
   // if pairs with 1 single character return true
   // if not return false
-  const charCount = new Map();
+  const charCount = new Map(); // creates an object and allows us to use has and set to check our conditions
 
   // Count the frequency of each character in the string
   // if one character return true
@@ -120,30 +120,3 @@ const callback3 = (elem) => false; // a callback that always returns false
 
 // slice / splice
 function dropIt(arr, cb) {}
-
-// function canMakePalindrome(string) {
-//     const charCount = new Map();
-
-//     // Count the frequency of each character in the string
-//     for (let char of string) {
-//       if (charCount.has(char)) {
-//         charCount.set(char, charCount.get(char) + 1);
-//       } else {
-//         charCount.set(char, 1);
-//       }
-//     }
-
-//     let oddCount = 0;
-
-//     // Check the frequency of characters
-//     for (let count of charCount.values()) {
-//       if (count % 2 !== 0) {
-//         oddCount++;
-//         if (oddCount > 1) {
-//           return false;
-//         }
-//       }
-//     }
-
-//     return true;
-//   }
