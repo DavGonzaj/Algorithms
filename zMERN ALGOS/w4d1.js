@@ -119,4 +119,16 @@ const callback3 = (elem) => false; // a callback that always returns false
  */
 
 // slice / splice
-function dropIt(arr, cb) {}
+function dropIt(arr, cb) {
+  for (const x of arr) {
+    if (cb(x)) {
+      //[1, 4, 3, 6, 2, 9, 15];
+      return arr.slice(arr.indexOf(x));
+    }
+  }
+  return [];
+}
+
+console.log(dropIt(nums1, callback1));
+console.log(dropIt(nums2, callback2));
+console.log(dropIt(nums3, callback3));
