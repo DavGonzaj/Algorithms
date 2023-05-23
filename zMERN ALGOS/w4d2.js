@@ -88,6 +88,7 @@ function groupObjects(items) {
 
   return hashtable;
 }
+console.log(groupObjects(objects));
 
 /* 
     Given two strings S and T containing only lowercase letters and "#" characters,
@@ -128,30 +129,19 @@ const expected4 = false;
  *    have been processed.
  */
 function backspaceStringCompare(S, T) {
-  const stackS = buildStack(S);
-  const stackT = buildStack(T);
-
-  // Compare the stacks
-  while (stackS.length > 0 && stackT.length > 0) {
-    if (stackS.pop() !== stackT.pop()) {
-      return false;
-    }
+  let compS = [];
+  let compT = [];
+  for (let i = 0; i < S.length; i++) {
+    S[i] === "#" ? compS.pop() : compS.push(S[i]);
+  }
+  for (let i = 0; i < T.length; i++) {
+    T[i] === "#" ? compT.pop() : compT.push(T[i]);
   }
 
-  // If both stacks are empty, the strings are equal
-  return stackS.length === 0 && stackT.length === 0;
+  return compS.join() === compT.join();
 }
 
-function buildStack(str) {
-  const stack = [];
-
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === "#") {
-      stack.pop();
-    } else {
-      stack.push(str[i]);
-    }
-  }
-
-  return stack;
-}
+console.log(S1, T1);
+console.log(S2, T2);
+console.log(S3, T3);
+console.log(S4, T4);
