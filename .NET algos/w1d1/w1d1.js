@@ -42,6 +42,72 @@ class SinglyLinkedList {
   }
 
   /**
+   * Creates a new node with the given data and inserts that node at the front
+   * of this list.
+   * - Time: (?).
+   * - Space: (?).
+   * @param {any} data The data for the new node.
+   * @returns {SinglyLinkedList} This list.
+   */
+  insertAtFront(data) {
+    // Create a new node
+    const newNode = new ListNode(data);
+
+    if (this.isEmpty()) {
+      // If the list is empty, make the new node the head
+      this.head = newNode;
+    }
+    // If the list is not empty, set the new node as the new head
+    newNode.next = this.head;
+    this.head = newNode;
+    return this;
+  }
+
+  // The list now contains: 1 -> 2 -> 3
+
+  /**
+   * Removes the first node of this list.
+   * - Time: (?).
+   * - Space: (?).
+   * @returns {any} The data from the removed node.
+   */
+  removeHead() {
+    if (this.head === null) {
+      // If the list is empty, there is nothing to remove
+      return;
+    }
+
+    this.head = this.head.next;
+    return this;
+  }
+
+  // EXTRA
+  /**
+   * Calculates the average of this list.
+   * - Time: (?).
+   * - Space: (?).
+   * @returns {number|NaN} The average of the node's data.
+   */
+  average() {
+    if (this.isEmpty()) {
+      // If the list is empty, return 0
+      return 0;
+    }
+
+    let sum = 0;
+    let count = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      sum += current.data;
+      count++;
+      current = current.next;
+    }
+
+    return sum / count;
+  }
+
+  /**
    * Determines if this list is empty.
    * - Time: O(?).
    * - Space: O(?).
@@ -76,14 +142,25 @@ class SinglyLinkedList {
   /**
    * Creates a new node with the given data and inserts it at the back of
    * this list.
-   * - Time: O(?).
-   * - Space: O(?).
+   * - Time: O(n) linear, n = length of list.
+   * - Space: O(n) linear due to the call stack.
    * @param {any} data The data to be added to the new node.
    * @param {?ListNode} runner The current node during the traversal of this list
    *    or null when the end of the list has been reached.
    * @returns {SinglyLinkedList} This list.
    */
-  insertAtBackRecursive(data, runner = this.head) {}
+  insertAtBackRecursive(data, runner = this.head) {
+    if (this.isEmpty()) {
+      this.head = new ListNode(data);
+      return this;
+    }
+
+    if (runner.next === null) {
+      runner.next = new ListNode(data);
+      return this;
+    }
+    return this.insertAtBackRecursive(data, runner.next);
+  }
 
   /**
    * Calls insertAtBack on each item of the given array.
@@ -118,10 +195,10 @@ class SinglyLinkedList {
 }
 
 /******************************************************************* 
-  Multiple test lists already constructed to test your methods on.
-  Below commented code depends on insertAtBack method to be completed,
-  after completing it, uncomment the code.
-  */
+Multiple test lists already constructed to test your methods on.
+Below commented code depends on insertAtBack method to be completed,
+after completing it, uncomment the code.
+*/
 const emptyList = new SinglyLinkedList();
 
 const singleNodeList = new SinglyLinkedList().insertAtBackMany([1]);
@@ -134,6 +211,9 @@ const unorderedList = new SinglyLinkedList().insertAtBackMany([
 
 console.log(unorderedList);
 console.log(unorderedList.toArr());
+console.log(unorderedList.insertAtFront(5).toArr());
+console.log(unorderedList.removeHead().toArr());
+console.log(unorderedList.average());
 
 /* node 4 connects to node 1, back to head */
 // const perfectLoopList = new SinglyLinkedList().insertAtBackMany([1, 2, 3, 4]);
