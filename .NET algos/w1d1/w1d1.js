@@ -40,6 +40,100 @@ class SinglyLinkedList {
     /** @type {ListNode|null} */
     this.head = null;
   }
+
+  /**
+   * Concatenates the nodes of a given list onto the back of this list.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @param {SinglyLinkedList} addList An instance of a different list whose
+   *    whose nodes will be added to the back of this list.
+   * @returns {SinglyLinkedList} This list with the added nodes.
+   */
+  concat(addList) {
+    if (this.isEmpty()) {
+      this.head = addList.head;
+    } else {
+      let tail = this.head;
+      while (tail.next) {
+        tail = tail.next;
+      }
+      tail.next = addList.head;
+    }
+    return this;
+  }
+
+  /**
+   * Finds the node with the smallest data and moves that node to the front of
+   * this list.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @returns {SinglyLinkedList} This list.
+   */
+  moveMinToFront() {
+    if (this.isEmpty() || this.head.next === null) {
+      return this;
+    }
+
+    let minNode = this.head;
+    let minPrev = null;
+    let runner = this.head;
+
+    while (runner.next) {
+      if (runner.next.data < minNode.data) {
+        minNode = runner.next;
+        minPrev = runner;
+      }
+      runner = runner.next;
+    }
+
+    if (minNode !== this.head) {
+      minPrev.next = minNode.next;
+      minNode.next = this.head;
+      this.head = minNode;
+    }
+
+    return this;
+  }
+
+  // EXTRA
+  /**
+   * Splits this list into two lists where the 2nd list starts with the node
+   * that has the given value.
+   * splitOnVal(5) for the list (1=>3=>5=>2=>4) will change list to (1=>3)
+   * and the return value will be a new list containing (5=>2=>4)
+   * - Time: O(?).
+   * - Space: O(?).
+   * @param {any} val The value in the node that the list should be split on.
+   * @returns {SinglyLinkedList} The split list containing the nodes that are
+   *    no longer in this list.
+   */
+  splitOnVal(val) {
+    if (this.isEmpty()) {
+      return new SinglyLinkedList();
+    }
+
+    if (this.head.data === val) {
+      const newList = new SinglyLinkedList();
+      newList.head = this.head.next;
+      this.head.next = null;
+      return newList;
+    }
+
+    let runner = this.head;
+
+    while (runner.next) {
+      if (runner.next.data === val) {
+        const newList = new SinglyLinkedList();
+        newList.head = runner.next;
+        runner.next = null;
+        return newList;
+      }
+      runner = runner.next;
+    }
+
+    return new SinglyLinkedList();
+  }
+
   /**
    * Retrieves the data of the second to last node in this list.
    * - Time: O(n) linear, n = length of list.
@@ -389,19 +483,20 @@ const unorderedList = new SinglyLinkedList().insertAtBackMany([
   -5, -10, 4, -3, 6, 1, -7, -2,
 ]);
 
-console.log(unorderedList);
-console.log(unorderedList.toArr());
-console.log(unorderedList.insertAtFront(5).toArr());
-console.log(unorderedList.removeHead().toArr());
-console.log(unorderedList.average());
-console.log(unorderedList.removeBack().toArr());
-console.log(unorderedList.contains());
-console.log(singleNodeList.secondToLast());
-console.log(unorderedList.secondToLast());
-console.log(singleNodeList.removeVal(1));
-console.log(unorderedList.removeVal(0));
-console.log(singleNodeList.prepend());
-console.log(unorderedList.prepend());
+// console.log(unorderedList);
+// console.log(unorderedList.toArr());
+// console.log(unorderedList.insertAtFront(5).toArr());
+// console.log(unorderedList.removeHead().toArr());
+// console.log(unorderedList.average());
+// console.log(unorderedList.removeBack().toArr());
+// console.log(unorderedList.contains());
+// console.log(singleNodeList.secondToLast());
+// console.log(unorderedList.secondToLast());
+// console.log(singleNodeList.removeVal(1));
+// console.log(unorderedList.removeVal(0));
+// console.log(singleNodeList.prepend());
+// console.log(unorderedList.prepend());
+console.log(singleNodeList.concat(unorderedList).toArr());
 
 /* node 4 connects to node 1, back to head */
 // const perfectLoopList = new SinglyLinkedList().insertAtBackMany([1, 2, 3, 4]);
