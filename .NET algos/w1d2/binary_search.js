@@ -39,8 +39,8 @@ class BinarySearchTree {
   }
   /**
    * Determines if this tree contains the given searchVal.
-   * - Time: O(?).
-   * - Space: O(?).
+   * - Time: O(log(n)) - average case, O(n) - worst case (skewed tree).
+   * - Space: O(log(n)) - average case, O(n) - worst case (skewed tree).
    * @param {number} searchVal The number to search for in the node's data.
    * @returns {boolean} Indicates if the searchVal was found.
    */
@@ -48,67 +48,57 @@ class BinarySearchTree {
     if (this.isEmpty()) {
       return false;
     }
-    let runner = this.root;
-    while (runner) {
-      if (runner.data === searchVal) {
+    let current = this.root;
+
+    while (current) {
+      if (searchVal === current.data) {
         return true;
-      }
-      if (runner.data > searchVal) {
-        if (runner.left) {
-          runner = runner.left;
-        } else {
-          return false;
-        }
+      } else if (searchVal < current.data) {
+        current = current.left;
       } else {
-        if (runner.data < searchVal) {
-          if (runner.right) {
-            runner = runner.right;
-          } else {
-            return false;
-          }
-        }
+        current = current.right;
       }
     }
+
+    return false;
   }
 
   /**
-   * Determines if this tree contains the given searchVal.
-   * - Time: O(?).
-   * - Space: O(?).
+   * Determines if this tree contains the given searchVal using recursion.
+   * - Time: O(log(n)) - average case, O(n) - worst case (skewed tree).
+   * - Space: O(log(n)) - average case, O(n) - worst case (skewed tree).
    * @param {number} searchVal The number to search for in the node's data.
+   * @param {BSTNode} current The node that is currently accessed from the tree as
+   *    the tree is being traversed.
    * @returns {boolean} Indicates if the searchVal was found.
    */
   containsRecursive(searchVal, current = this.root) {
     if (this.isEmpty()) {
       return false;
     }
-    if (current.data === searchVal) {
+
+    if (searchVal === current.data) {
       return true;
-    }
-    if (searchVal > current.data) {
-      if (current.right) {
-        return this.containsRecursive(searchVal, current.right);
-      }
-      return false;
-    }
-    if (current.left) {
+    } else if (searchVal < current.data) {
       return this.containsRecursive(searchVal, current.left);
+    } else {
+      return this.containsRecursive(searchVal, current.right);
     }
-    return false;
   }
 
   /**
    * Calculates the range (max - min) from the given startNode.
-   * - Time: O(?).
-   * - Space: O(?).
-   * @param {Node} startNode The node to start from to calculate the range.
-   * @returns {number|null} The range of this tree or a sub tree depending on if the
+   * - Time: O(n) - all nodes must be visited to find the minimum and maximum.
+   * - Space: O(n) - all nodes are visited in the worst case (skewed tree).
+   * @param {BSTNode} startNode The node to start from to calculate the range.
+   * @returns {number|null} The range of this tree or a subtree depending on if the
    *    startNode is the root or not.
    */
   range(startNode = this.root) {
     if (this.isEmpty()) {
       return null;
     }
+
     return this.max(startNode) - this.min(startNode);
   }
 
