@@ -38,6 +38,80 @@ class BinarySearchTree {
     this.root = null;
   }
   /**
+   * Recursively counts the total number of nodes in this tree.
+   * - Time: O(n), where n is the number of nodes in the tree.
+   * - Space: O(h), where h is the height of the tree (recursive call stack).
+   * @param {BSTNode} node The current node during the traversal of this tree.
+   * @returns {number} The total number of nodes.
+   */
+  size(node = this.root) {
+    // If the current node is null, it means we have reached the end of a branch,
+    // so we return 0 to indicate that there are no nodes in this subtree.
+    if (node === null) {
+      return 0;
+    }
+
+    // If the current node is not null, we recursively calculate the size of the
+    // left subtree, the size of the right subtree, and add 1 to account for the
+    // current node.
+    return 1 + this.size(node.left) + this.size(node.right);
+  }
+
+  /**
+   * Calculates the height of the tree which is based on how many nodes from
+   * top to bottom (whichever side is taller).
+   * - Time: O(n), where n is the number of nodes in the tree.
+   * - Space: O(h), where h is the height of the tree (recursive call stack).
+   * @param {BSTNode} node The current node during traversal of this tree.
+   * @returns {number} The height of the tree.
+   */
+  height(node = this.root) {
+    // If the current node is null, it means we have reached the end of a branch,
+    // so we return 0 to indicate that the height of this subtree is 0.
+    if (node === null) {
+      return 0;
+    }
+
+    // If the current node is not null, we recursively calculate the height of the
+    // left subtree and the height of the right subtree. We take the maximum of
+    // these two heights and add 1 to account for the current node.
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  /**
+   * Determines if this tree is a full tree. A full tree is a tree where every
+   * node has both a left and a right except for the leaf nodes (last nodes)
+   * - Time: O(n), where n is the number of nodes in the tree.
+   * - Space: O(h), where h is the height of the tree (recursive call stack).
+   * @param {BSTNode} node The current node during traversal of this tree.
+   * @returns {boolean} Indicates if this tree is full.
+   */
+  isFull(node = this.root) {
+    // If the current node is null, it means we have reached the end of a branch,
+    // so we return true to indicate that this subtree is a full tree.
+    if (node === null) {
+      return true;
+    }
+
+    // If the current node is not null, we check if it violates the conditions of
+    // a full tree. If the left child is null and the right child is not null, or
+    // vice versa, then this subtree is not a full tree, so we return false.
+    if (
+      (node.left === null && node.right !== null) ||
+      (node.left !== null && node.right === null)
+    ) {
+      return false;
+    }
+
+    // If the current node does not violate the conditions of a full tree, we
+    // recursively check if both the left subtree and the right subtree are full
+    // trees, and return the logical AND of these results.
+    return this.isFull(node.left) && this.isFull(node.right);
+  }
+
+  /**
    * DFS Preorder: (CurrNode, Left, Right)
    * Converts this BST into an array following Depth First Search preorder.
    * Example on the fullTree var:
@@ -422,9 +496,19 @@ fullTree
 
 // fullTree.print();
 
-console.log(fullTree.toArrPreorder());
-console.log(fullTree.toArrInorder());
-console.log(fullTree.toArrPostorder());
-console.log(emptyTree.toArrPreorder());
-console.log(emptyTree.toArrInorder());
-console.log(emptyTree.toArrPostorder());
+// console.log(fullTree.toArrPreorder());
+// console.log(fullTree.toArrInorder());
+// console.log(fullTree.toArrPostorder());
+// console.log(emptyTree.toArrPreorder());
+// console.log(emptyTree.toArrInorder());
+// console.log(emptyTree.toArrPostorder());
+
+// console.log(fullTree.size());
+// console.log(emptyTree.size());
+// console.log(fullTree.height());
+// console.log(emptyTree.height());
+console.log(fullTree.isFull());
+console.log(emptyTree.isFull());
+console.log(twoLevelTree.isFull());
+console.log(threeLevelTree.isFull());
+console.log(oneNodeTree.isFull());
