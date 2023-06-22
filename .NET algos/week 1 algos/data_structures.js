@@ -42,6 +42,77 @@ class SinglyLinkedList {
   }
 
   /**
+   * Reverses this list in-place without using any extra lists.
+   * - Time: (?).
+   * - Space: (?).
+   * @returns {SinglyLinkedList} This list.
+   */
+  reverse() {
+    let prev = null; // Create a variable to store the previous node (initially null).
+    let current = this.head; // Start with the current node set to the head of the list.
+    let next = null; // Create a variable to store the next node (initially null).
+
+    while (current != null) {
+      next = current.next; // Store the next node in the 'next' variable.
+      current.next = prev; // Reverse the 'next' pointer of the current node to point to the previous node.
+      prev = current; // Move the 'prev' pointer to the current node.
+      current = next; // Move the 'current' pointer to the next node.
+    }
+
+    this.head = prev; // Set the head of the list to the last node (previously the tail node).
+    return this; // Return the modified list.
+  }
+
+  /**
+   * Determines whether the list has a loop in it which would result in
+   * infinitely traversing unless otherwise avoided. A loop is when a node's
+   * next points to a node that is behind it.
+   * - Time: (?).
+   * - Space: (?).
+   * @returns {boolean} Whether the list has a loop or not.
+   */
+  hasLoop() {
+    let slow = this.head;
+    let fast = this.head;
+
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    if (slow === fast) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Removes all the nodes that have a negative integer as their data.
+   * - Time: (?).
+   * - Space: (?).
+   * @returns {SinglyLinkedList} This list after the negatives are removed.
+   */
+  removeNegatives() {
+    let current = this.head;
+    let prev = null;
+    //checks if the very first node is negative
+    while (current != null && current.data < 0) {
+      this.head = current.next;
+      current = this.head;
+    }
+    while (current !== null) {
+      if (current.data < 0) {
+        prev.next = current.next;
+      } else {
+        prev = current;
+      }
+
+      current = current.next;
+    }
+
+    return this;
+  }
+
+  /**
    * Concatenates the nodes of a given list onto the back of this list.
    * - Time: O(?).
    * - Space: O(?).
@@ -496,7 +567,23 @@ const unorderedList = new SinglyLinkedList().insertAtBackMany([
 // console.log(unorderedList.removeVal(0));
 // console.log(singleNodeList.prepend());
 // console.log(unorderedList.prepend());
-console.log(singleNodeList.concat(unorderedList).toArr());
+// console.log(singleNodeList.concat(unorderedList).toArr());
+// console.log(singleNodeList.reverse().toArr());
+// console.log(firstThreeList.reverse().toArr());
+// console.log(secondThreeList.reverse().toArr());
+// console.log(unorderedList.reverse().toArr());
+// console.log(unorderedList.hasLoop());
+// console.log(firstThreeList.hasLoop());
+// console.log(secondThreeList.hasLoop());
+// console.log(singleNodeList.hasLoop());
+// console.log(biNodeList.hasLoop());
+// console.log(emptyList.hasLoop());
+// console.log(firstThreeList.removeNegatives().toArr());
+// console.log(secondThreeList.removeNegatives().toArr());
+// console.log(singleNodeList.removeNegatives().toArr());
+// console.log(biNodeList.removeNegatives().toArr());
+// console.log(emptyList.removeNegatives().toArr());
+console.log(unorderedList.removeNegatives().toArr());
 
 /* node 4 connects to node 1, back to head */
 // const perfectLoopList = new SinglyLinkedList().insertAtBackMany([1, 2, 3, 4]);
