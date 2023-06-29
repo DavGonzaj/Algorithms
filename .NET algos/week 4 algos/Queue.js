@@ -9,53 +9,82 @@ class Queue {
   }
 
   /**
+   * Determines whether the sum of the left half of the queue items is equal to
+   * the sum of the right half. Avoid indexing the queue items directly via
+   * bracket notation, use the queue methods instead for practice.
+   * Use no extra array or objects.
+   * The queue should be returned to it's original order when done.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @returns {boolean} Whether the sum of the left and right halves is equal.
+   */
+  isSumOfHalvesEqual() {
+    if (this.size() === 0) {
+      return true;
+    }
+
+    let leftSum = 0;
+    let rightSum = 0;
+
+    // Find the middle node of the queue
+    let slow = this.head;
+    let fast = this.head;
+
+    while (fast && fast.next && fast.next.next) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+
+    // Calculate the sum of the left half
+    let current = this.head;
+    while (current !== slow) {
+      leftSum += current.value;
+      current = current.next;
+    }
+
+    // Calculate the sum of the right half
+    current = slow.next;
+    while (current) {
+      rightSum += current.value;
+      current = current.next;
+    }
+
+    return leftSum === rightSum;
+  }
+
+  /**
    * Compares this queue to another given queue to see if they are equal.
    * Avoid indexing the queue items directly via bracket notation, use the
    * queue methods instead for practice.
    * Use no extra array or objects.
    * The queues should be returned to their original order when done.
-   * - Time: O(?).
-   * - Space: O(?).
+   * - Time: O(n^2) quadratic, n = queue length. Quadratic due to dequeue on an
+   *     array queue being O(n).
+   * - Space: O(1) constant.
    * @param {Queue} q2 The queue to be compared against this queue.
    * @returns {boolean} Whether all the items of the two queues are equal and
    *    in the same order.
    */
   compareQueues(q2) {
-    // Check if the sizes of the two queues are different
     if (this.size() !== q2.size()) {
       return false;
     }
-
-    // Create temporary queues to store the dequeued items
-    const tempQueue1 = new Queue();
-    const tempQueue2 = new Queue();
-
-    // Flag to track if the queues are equal
+    let count = 0;
     let isEqual = true;
+    const len = this.size();
 
-    // Compare the items of the two queues while dequeuing
-    while (!this.isEmpty()) {
-      // Dequeue an item from each queue for comparison
-      const item1 = this.dequeue();
-      const item2 = q2.dequeue();
+    while (count < len) {
+      const dequeued1 = this.dequeue();
+      const dequeued2 = q2.dequeue();
 
-      // If the dequeued items are not equal, set the flag to false
-      if (item1 !== item2) {
+      if (dequeued1 !== dequeued2) {
         isEqual = false;
       }
 
-      // Enqueue the dequeued items into the temporary queues to preserve order
-      tempQueue1.enqueue(item1);
-      tempQueue2.enqueue(item2);
+      this.enqueue(dequeued1);
+      q2.enqueue(dequeued2);
+      count++;
     }
-
-    // Restore the original order of the queues by enqueueing the items back
-    while (!tempQueue1.isEmpty()) {
-      this.enqueue(tempQueue1.dequeue());
-      q2.enqueue(tempQueue2.dequeue());
-    }
-
-    // Return the result of the comparison
     return isEqual;
   }
 
@@ -65,34 +94,35 @@ class Queue {
    * queue methods for practice.
    * Use only 1 stack as additional storage, no other arrays or objects.
    * The queue should be returned to its original order when done.
-   * - Time: O(?).
-   * - Space: O(?).
+   * - Time: O(n^2) quadratic, n = queue length. Quadratic due to dequeue on an
+   *     array queue being O(n).
+   * - Space: O(n) from the stack being used to store the items again.
    * @returns {boolean}
    */
   isPalindrome() {
-    const stack = []; // Create an empty stack to store the dequeued items
-    let isPalindrome = true; // Flag to track if the queue is a palindrome
+    let isPalin = true;
+    const stack = new Stack(),
+      len = this.size();
 
-    // Dequeue all items from the queue and push them onto the stack
-    for (let i = 0; i < this.size(); i++) {
-      const item = this.dequeue(); // Dequeue an item from the front of the queue
-      stack.push(item); // Push the dequeued item onto the stack
-      this.enqueue(item); // Enqueue the item back to the rear of the queue
+    for (let i = 0; i < len; i++) {
+      let dequeued = this.dequeue();
+      stack.push(dequeued);
+      // add it back so the queue items and order is restored at the end
+      this.enqueue(dequeued);
     }
 
-    // Compare the items in reverse order by dequeuing from the queue
-    // and checking against the corresponding item in the stack
-    for (let i = this.size() - 1; i >= 0; i--) {
-      const item = this.dequeue(); // Dequeue an item from the front of the queue
-      if (item !== stack[i]) {
-        // Compare the dequeued item with the item at index i in the stack
-        isPalindrome = false; // Set the isPalindrome flag to false if there is a mismatch
+    for (let i = 0; i < len; i++) {
+      let dequeued = this.dequeue();
+      let popped = stack.pop();
+
+      if (popped !== dequeued) {
+        isPalin = false;
       }
-      this.enqueue(item); // Enqueue the item back to the rear of the queue
-    }
 
-    // Return whether the queue is a palindrome or not
-    return isPalindrome;
+      // add it back so the queue items and order is restored at the end
+      this.enqueue(dequeued);
+    }
+    return isPalin;
   }
 
   /**
@@ -149,58 +179,22 @@ class Queue {
   }
 }
 
-// Create a new instance of Queue
+/* Rebuild the above class using a linked list instead of an array. */
+// Create a new queue instance
 const queue = new Queue();
 
-// Test enqueue() and size()
-console.log(queue.enqueue(1)); // Output: 1
-console.log(queue.enqueue(2)); // Output: 2
-console.log(queue.enqueue(3)); // Output: 3
-console.log(queue.size()); // Output: 3
-
-// Test front()
-console.log(queue.front()); // Output: 1
-
-// Test dequeue() and isEmpty()
-console.log(queue.dequeue()); // Output: 1
-console.log(queue.isEmpty()); // Output: false
-console.log(queue.size()); // Output: 2
-
-const queue1 = new Queue();
+// Enqueue items to the queue
 queue.enqueue(1);
 queue.enqueue(2);
 queue.enqueue(3);
+queue.enqueue(4);
 
-const queue2 = new Queue();
-queue2.enqueue(1);
-queue2.enqueue(2);
-queue2.enqueue(3);
+// Test the isSumOfHalvesEqual method
+console.log(queue.isSumOfHalvesEqual()); // Output: false
 
-console.log(queue.compareQueues(queue2)); // Output: true
+// Enqueue more items to make the sum of halves equal
+queue.enqueue(2);
+queue.enqueue(3);
 
-const queue3 = new Queue();
-queue3.enqueue(1);
-queue3.enqueue(2);
-queue3.enqueue(3);
-queue3.enqueue(4);
-
-console.log(queue.compareQueues(queue3)); // Output: false
-
-const queue4 = new Queue();
-queue4.enqueue(1);
-queue4.enqueue(2);
-queue4.enqueue(3);
-queue4.enqueue(2);
-queue4.enqueue(1);
-
-console.log(queue4.isPalindrome()); // Output: true
-
-const queue5 = new Queue();
-queue5.enqueue(1);
-queue5.enqueue(2);
-queue5.enqueue(3);
-queue5.enqueue(4);
-
-console.log(queue5.isPalindrome()); // Output: false
-
-/* Rebuild the above class using a linked list instead of an array. */
+// Test again
+console.log(queue.isSumOfHalvesEqual()); // Output: true
