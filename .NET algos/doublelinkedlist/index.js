@@ -24,6 +24,66 @@ class DoublyLinkedList {
     this.head = null;
     this.tail = null;
   }
+  /**
+   * Retrieves the data from the nthLast node in this list.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @param {number} nthLast Indicates the position from the back of the list.
+   * @returns {any}
+   */
+  nthToLast(nthLast) {
+    // If the list is empty or nthLast is less than 1, return null
+    if (this.isEmpty() || nthLast < 1) {
+      return null;
+    }
+
+    // Start from the tail of the list
+    let runner = this.tail;
+
+    // Traverse the list backwards until reaching the nthLast node or the end of the list
+    while (nthLast > 1 && runner !== null) {
+      runner = runner.prev; // Move to the previous node
+      nthLast--;
+    }
+
+    // If the runner is not null, return the data of the nthLast node
+    if (runner !== null) {
+      return runner.data;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Determines if the node's data of this list forms a palindrome.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @returns {boolean} Indicates if this list is a palindrome.
+   */
+  isPalindrome() {
+    // If the list is empty, it can't be a palindrome, so return false
+    if (this.isEmpty()) {
+      return false;
+    }
+
+    // Initialize two runners: one starting from the head and one starting from the tail
+    let frontRunner = this.head;
+    let backRunner = this.tail;
+
+    // Compare the data of the nodes while moving towards the center of the list
+    while (frontRunner !== backRunner && frontRunner.prev !== backRunner) {
+      // If the data of the frontRunner and backRunner nodes are not equal, return false
+      if (frontRunner.data !== backRunner.data) {
+        return false;
+      }
+
+      frontRunner = frontRunner.next; // Move the frontRunner forward
+      backRunner = backRunner.prev; // Move the backRunner backward
+    }
+
+    // If the loop completes without finding any mismatched nodes, it's a palindrome, so return true
+    return true;
+  }
 
   /**
    * Creates a new node and adds it at the front of this list.
@@ -191,11 +251,21 @@ const unorderedList = new DoublyLinkedList().insertAtBackMany([
   -5, -10, 4, -3, 6, 1, -7, -2,
 ]);
 
-emptyList.removeMiddleNode();
-console.log(emptyList.toArray());
-console.log(singleNodeList.toArray());
-console.log(firstThreeList.toArray());
-console.log(secondThreeList.toArray());
-console.log(secondThreeList.insertAtFront(10).toArray());
-secondThreeList.removeMiddleNode();
-console.log(secondThreeList.toArray());
+console.log(emptyList.nthToLast(1)); // null
+console.log(singleNodeList.nthToLast(1)); // 1
+console.log(firstThreeList.nthToLast(2)); // 2
+console.log(secondThreeList.nthToLast(3)); // 4
+
+console.log(emptyList.isPalindrome()); // false
+console.log(singleNodeList.isPalindrome()); // true
+console.log(firstThreeList.isPalindrome()); // false
+console.log(secondThreeList.isPalindrome()); // false
+
+// emptyList.removeMiddleNode();
+// console.log(emptyList.toArray());
+// console.log(singleNodeList.toArray());
+// console.log(firstThreeList.toArray());
+// console.log(secondThreeList.toArray());
+// console.log(secondThreeList.insertAtFront(10).toArray());
+// secondThreeList.removeMiddleNode();
+// console.log(secondThreeList.toArray());
